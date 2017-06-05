@@ -148,6 +148,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	var lowerOpacity = new L.Control.lowerOpacity({position: gen_btns_pos});
 	var share = new L.Control({position: gen_btns_pos});
 	var searchControl = new L.Control.geocoder({position: gen_btns_pos, defaultMarkGeocode: false});
+	var scaleControl = new L.control.scale({position: 'bottomright', imperial: false});
 	var data_proc_control = new L.Control({position: gen_btns_pos});
 			
 	// Initiate the map.
@@ -873,6 +874,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		info3.addTo(map);			
 		refocus.addTo(map);			
 		//circles.addTo(map);			
+		scaleControl.addTo(map);
 		share.addTo(map);
 		if (!show_extra)
 			data_proc_control.addTo(map);

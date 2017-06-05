@@ -25,6 +25,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	var external_data_array_names = [];		
 	var external_data_headers = [];	
 	var extraFeatureGroup	= '';
+	var muni_name_options	= '<option val="none">' + ui_strings['select_muni'] + '</option>';
 	var categories_select_all_options = categories_select_options;	// Initiate local categories select options.
 	var min_brew_select = 3, max_brew_select = 9;
 	var selected_style = 
@@ -52,7 +53,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			dashArray: '1',
 			fillOpacity: 0.7
 		};		
-	var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+	var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);	
 	
 	var balloon_hor_pos_edit = rtl > 0 ? "left" : "right";
 	var balloon_hor_pos_control = rtl > 0 ? "right" : "left";
@@ -273,6 +274,10 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			streets.addTo(map);		
 			map.removeLayer(geojsonLayer); // Re initiate the loaded layers.
 			map.addLayer(geojsonLayer);
+			// Initiate the municipalities selector with a reference to the layer id.
+			geojsonLayer.eachLayer(function (layer) {
+				muni_name_options += "<option data-id='" + layer._leaflet_id + "' value='" + layer.feature.properties[name_prop] + "'>" + layer.feature.properties[name_prop] + "</option>";	
+			});			
 			changeColorByAttr(geojsonLayer, current_comn_name/*, undefined, undefined*/);							
 			// Initiate the total number of layer entities (cities).
 			feature_group_length = geojsonLayer.getLayers().length;			
@@ -363,7 +368,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		filter_array[layer.feature.properties[unique_id_col_name]] = [];
 		layer.centroid = layer.getBounds().getCenter();	
 		var circle = L.circle(layer.centroid);
-		markersLayer.addLayer(circle);
+		markersLayer.addLayer(circle);		
 	}
 	
 	function addExtrnalData(featureGroup, data_array, headers_array, key_col, start_col) {		
@@ -450,9 +455,10 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		// Create the content div
 		var div_content = L.DomUtil.create('div');
 		div_content.id = "info_content";
-		var div_footer = L.DomUtil.create('div');
+		var div_footer = L.DomUtil.create('div', 'minimized');
 		div_footer.id = "info_footer";
-		div_footer.innerHTML = '<div id="expand_info" class="minimized"> ▽</div>';
+		div_footer.innerHTML  = '<div id="muni_sel_container"><select id="muni_sel" class="muni_sel user_action">' + muni_name_options + '</select></div>';
+		
 		
 		// Add all the elements to the current div.
 		this._div.appendChild(category_select);
@@ -523,18 +529,38 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		document.getElementById('info_content').innerHTML = city_info;			
 	};	
 	
-	function toggleExpandedView(e) {
+	//function toggleExpandedView(e) {
+	function openMuniProfile(e) {
 		var info_footer = document.getElementById("info_footer");
-		var info_footer_control = e.target;
-		if(info_footer_control.classList.contains("minimized")) {
-			info_footer_control.classList.remove("minimized");
-			info_footer_control.innerHTML = "△";
-			info_footer.classList.add("expanded");
-		} else {
-			info_footer_control.classList.add("minimized");
-			info_footer_control.innerHTML = "▽";
-			info_footer.classList.remove("expanded");
+		var info_footer_select = e.target;
+		
+		if(info_footer.classList.contains("minimized")) {
+			info_footer.classList.remove("minimized");			
+			info_footer.classList.add("expanded");	
+			
 		}
+		
+		// Close the profile div if no municipality is chosen.		
+		if (info_footer_select.selectedIndex == 0) {
+			info_footer.classList.remove("expanded");			
+			info_footer.classList.add("minimized");					
+		} else {
+			var data_id = info_footer_select[info_footer_select.selectedIndex].attributes['data-id'].value;
+			changeMuniSelect(geojsonLayer.getLayer(data_id));		
+		}		
+	}
+		
+	// Stubs for GoogleServe	 
+	function changeMuniSelect(layer) {
+	 console.log(layer);
+	}
+
+	function createDataProfileSelect() {
+	 
+	}
+
+	function changeDataProfile(layer, prof_id) {
+	 
 	}
 	
 	function toggleHeaderColSelect() {				
@@ -776,28 +802,36 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		// TODO: Add updateMultipleSelection
 		//info.update(layer.feature.properties);			
 	}
-					
-	function changeDisplayData(e) {
+	// Change the displayed data series.
+	// 1. Receives event - the change is from the paginating elements.
+	// 2. Receives an empty event and a col_name - change the displayed data by col_name.
+	function changeDisplayData(e, col_name = null) {
 		//e.preventDefault();
-		if (e.target.getAttribute('data-balloon'))
-			e.target.removeAttribute('data-balloon');
 		destroyDataTable();			
 		var cat_id = document.getElementById("cat_sel").value;
 		var curr_cat_id = cat_id;
-		var headers_l = header_name_to_alias.length;	
-		for (var i = 0; i < headers_l; i++) {
-			if (header_name_to_alias[i].name === current_comn_name){
-				var next_map_index = (this.classList.contains("prev_data")) ? (i + 1)  : (i - 1);
-				if (typeof(header_name_to_alias[next_map_index]) == 'undefined') {
-					next_map_index = (this.classList.contains("prev_data")) ? (0)  : (headers_l - 1);
-					curr_cat_id = header_name_to_alias[next_map_index].cat_id;
-					current_comn_name = header_name_to_alias[next_map_index].name;	
-				} else {
-					curr_cat_id = header_name_to_alias[next_map_index].cat_id;
-					current_comn_name = header_name_to_alias[next_map_index].name;
-				}					
-				break;
+		if (!col_name) {
+			if (e.target.getAttribute('data-balloon'))
+				e.target.removeAttribute('data-balloon');					
+			var headers_l = header_name_to_alias.length;	
+			for (var i = 0; i < headers_l; i++) {
+				if (header_name_to_alias[i].name === current_comn_name){
+					var next_map_index = (this.classList.contains("prev_data")) ? (i + 1)  : (i - 1);
+					if (typeof(header_name_to_alias[next_map_index]) == 'undefined') {
+						next_map_index = (this.classList.contains("prev_data")) ? (0)  : (headers_l - 1);
+						curr_cat_id = header_name_to_alias[next_map_index].cat_id;
+						current_comn_name = header_name_to_alias[next_map_index].name;	
+					} else {
+						curr_cat_id = header_name_to_alias[next_map_index].cat_id;
+						current_comn_name = header_name_to_alias[next_map_index].name;
+					}					
+					break;
+				}
 			}
+		} else {
+			current_comn_name = col_name;
+			curr_cat_id = getCurrentHeaderArray().cat_id;
+			
 		}
 		if (cat_id != curr_cat_id)	{							
 			changeColSelectOptions(curr_cat_id);				
@@ -808,7 +842,9 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		toggleShowTableContainer();					
 		//document.getElementById('map').click();
 		//e.target.removeAttribute("data-balloon-visible");
-	}			
+	}
+
+	
 	
 	function changeColumn(event, ui, external_val) {
 		//console.log(ui);
@@ -933,7 +969,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			document.querySelector('#info_header > h4').addEventListener('click', toggleHeaderColSelect);							
 		}			
 		
-		document.getElementById("expand_info").addEventListener("click", toggleExpandedView);		
+		document.getElementById("muni_sel").addEventListener("change", openMuniProfile);		
 	}
 	
 	function updateControlElements() {
@@ -2030,6 +2066,7 @@ var ui_objects_titles =
 	};
 var ui_strings = 
 	{
+		"select_muni" : 'הצג פרופיל',
 		"classybrew_methods" : 'שיטת סיווג נתונים',
 		"quantile" : 'אחוזים',
 		"equal_interval" : 'מרווחים שווים',
@@ -2062,7 +2099,8 @@ var ui_strings =
 		"range" : "טווח",
 		"muni_name" : "שם הרשות",
 		//"empty_info_sub_title" : 'התמקד בעיר להצגת נתונים, ניתן לבחור עיר ע"י קליק כפול',
-		"empty_info_sub_title" : 'התמקד בעיר להצגת נתונים<br> ניתן לבחור ערים להשוואה בקליק כפול <br> או לבחור קבוצת נתונים מהמקרא',
+		//"empty_info_sub_title" : 'התמקד בעיר להצגת נתונים<br> ניתן לבחור ערים להשוואה בקליק כפול <br> או לבחור קבוצת נתונים מהמקרא',
+		"empty_info_sub_title" : 'ניתן לבחור ערים להשוואה בקליק כפול <br> או לבחור קבוצת נתונים מהמקרא',
 		"empty_info_sub_title_mobile" : 'ניתן לבחור ערים להשוואה בלחיצה<br> או לבחור קבוצת נתונים מהמקרא',
 		"choose_display_col" : " בחר נתון להצגה",
 		"choose_filter_col" : "סנן נתונים לפי",

@@ -458,7 +458,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		var div_footer = L.DomUtil.create('div', 'minimized');
 		div_footer.id = "info_footer";
 		div_footer.innerHTML  = '<div id="muni_sel_container"><select id="muni_sel" class="muni_sel user_action">' + muni_name_options + '</select></div>';
-		div_footer.innerHTML += '<div id="muni_data"></div>'
+		div_footer.innerHTML += '<div id="muni_data"><div id="general_data"></div><div id="special_data"></div><div id="external_links_data"></div></div>'
 
 		// Add all the elements to the current div.
 		this._div.appendChild(category_select);
@@ -552,14 +552,16 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 
 	// Stubs for GoogleServe
 	function changeMuniSelect(layer) {
+		addGeneralData(layer);
+	}
+
+	function addGeneralData(layer) {
+		$("#general_data").empty();
 		const names = ["c1", "c2", "c3"];
 		for (const name of names) {
 			const headerArray = getCurrentHeaderArray(name);
-
-			$("#muni_data").append(headerArray.alias + " : " + layer.feature.properties[name] + "<br/>");
+			$("#general_data").append(headerArray.alias + " : " + layer.feature.properties[name] + "<br/>");
 		}
-//	 	console.log(layer);
-//		console.log(getCurrentHeaderArray("b1"));
 	}
 
 	function createDataProfileSelect() {

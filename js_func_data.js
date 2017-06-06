@@ -552,7 +552,14 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 
 	// Stubs for GoogleServe
 	function changeMuniSelect(layer) {
-	 console.log(layer);
+		const names = ["c1", "c2", "c3"];
+		for (const name of names) {
+			const headerArray = getCurrentHeaderArray(name);
+
+			$("#muni_data").append(headerArray.alias + " : " + layer.feature.properties[name] + "<br/>");
+		}
+//	 	console.log(layer);
+//		console.log(getCurrentHeaderArray("b1"));
 	}
 
 	function createDataProfileSelect() {

@@ -558,6 +558,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	// Stubs for GoogleServe
 	function changeMuniSelect(layer) {
 		addGeneralData(layer);
+		addSpecialData(layer);
 	}
 
 	function addGeneralData(layer) {
@@ -566,6 +567,18 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		for (const name of names) {
 			const headerArray = getCurrentHeaderArray(name);
 			$("#general_data").append(headerArray.alias + " : " + formatNumberToDisplay(layer.feature.properties[name]) + "<br/>");
+		}
+	}
+
+	function addSpecialData(layer) {
+		if (layer.extremeValues) {
+			layer.extremeValues.forEach(function(extreme) {
+				// extreme.header, extreme.rank
+				const headerArray = getCurrentHeaderArray(extreme.header);
+				$("#special_data").append(headerArray.alias + " : " +
+					formatNumberToDisplay(layer.feature.properties[extreme.header]) +
+					" (#" + (extreme.rank + 1) + ")<br/>");
+			});
 		}
 	}
 
@@ -920,7 +933,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		var layersCount = geojsonLayer.getLayers().length;
 		profileHeaders.forEach(function (header) {
 			profileValues[header].sort(function(a, b) {
-				return a.value - b.value;
+				return b.value - a.value;
 			});
 
 			for (var i = 0; i < layersCount / 10; i++) {

@@ -124,6 +124,8 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		opacity: 0.5
 	});
 
+	var profileHeaders = ['a14','a35','a89'];
+
 	var baseLayers = {
 		"Streets": streets,
 		"Grayscale": grayscale,
@@ -274,6 +276,9 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			streets.addTo(map);
 			map.removeLayer(geojsonLayer); // Re initiate the loaded layers.
 			map.addLayer(geojsonLayer);
+
+			prepareExtremeValues();
+
 			// Initiate the municipalities selector with a reference to the layer id.
 			geojsonLayer.eachLayer(function (layer) {
 				muni_name_options += "<option data-id='" + layer._leaflet_id + "' value='" + layer.feature.properties[name_prop] + "'>" + layer.feature.properties[name_prop] + "</option>";
@@ -553,6 +558,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	// Stubs for GoogleServe
 	function changeMuniSelect(layer) {
 		addGeneralData(layer);
+		addSpecialData(layer);
 	}
 
 	function addGeneralData(layer) {
@@ -563,6 +569,18 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			console.log(changeDisplayData(undefined, name));
 			$("#general_data").append("<a href='#' id='datalink_" + name + "'>" + headerArray.alias + "</a> : " + formatNumberToDisplay(layer.feature.properties[name]) + "<br/>");
 			$("#datalink_" + name).on('click',() => changeDisplayData(undefined, name));
+		}
+	}
+
+	function addSpecialData(layer) {
+		if (layer.extremeValues) {
+			layer.extremeValues.forEach(function(extreme) {
+				// extreme.header, extreme.rank
+				const headerArray = getCurrentHeaderArray(extreme.header);
+				$("#special_data").append(headerArray.alias + " : " +
+					formatNumberToDisplay(layer.feature.properties[extreme.header]) +
+					" (#" + (extreme.rank + 1) + ")<br/>");
+			});
 		}
 	}
 
@@ -900,6 +918,44 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		updateFilterArraysAndCombo(chosen_option_name, chosen_option, num,curr_option);
 		Cookies.set('last_filter' + curr_leaf, chosen_option, { expires: 7 });
 		toggleShowTableContainer();
+	}
+
+	function prepareExtremeValues() {
+		var profileValues = {};
+		geojsonLayer.eachLayer(function (layer) {
+			profileHeaders.forEach(function (header) {
+				profileValues[header] = profileValues[header] || [];
+				profileValues[header].push({
+					id: layer._leaflet_id,
+					value: layer.feature.properties[header]
+				});
+			});
+		});
+
+		var layersCount = geojsonLayer.getLayers().length;
+		profileHeaders.forEach(function (header) {
+			profileValues[header].sort(function(a, b) {
+				return b.value - a.value;
+			});
+
+			for (var i = 0; i < layersCount / 10; i++) {
+				var layer = geojsonLayer.getLayer(profileValues[header][i].id);
+				layer.extremeValues = layer.extremeValues || [];
+				layer.extremeValues.push({
+					header: header,
+					rank: i
+				});
+			}
+
+			for (var i = layersCount - 1; i > layersCount * 0.9; i--) {
+				var layer = geojsonLayer.getLayer(profileValues[header][i].id);
+				layer.extremeValues = layer.extremeValues || [];
+				layer.extremeValues.push({
+					header: header,
+					rank: i
+				});
+			}
+		});
 	}
 
 	function addControlElements() {

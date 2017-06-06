@@ -566,7 +566,6 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		const names = ["a14", "a15", "a230", "a33", "a34"];
 		for (const name of names) {
 			const headerArray = getCurrentHeaderArray(name);
-			console.log(changeDisplayData(undefined, name));
 			$("#general_data").append("<a href='#' id='datalink_" + name + "'>" + headerArray.alias + "</a> : " + formatNumberToDisplay(layer.feature.properties[name]) + "<br/>");
 			$("#datalink_" + name).on('click',() => changeDisplayData(undefined, name));
 		}

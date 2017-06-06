@@ -124,7 +124,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		opacity: 0.5
 	});
 
-	var profileHeaders = ['a14','a35','a89'];
+	var profileHeaders = ["a14", "a15", "a230", "a33", "a34", "a35", "a89"];
 
 	var baseLayers = {
 		"Streets": streets,
@@ -376,6 +376,10 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		markersLayer.addLayer(circle);
 	}
 
+	function getLayersCount() {
+		return layersCount = geojsonLayer.getLayers().length;
+	}
+
 	function addExtrnalData(featureGroup, data_array, headers_array, key_col, start_col) {
 		//console.log(data_array);
 		//console.log(headers_array.length);
@@ -564,25 +568,39 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	function addGeneralData(layer) {
 		$("#general_data").empty();
 		const names = ["a14", "a15", "a230", "a33", "a34"];
-		for (const name of names) {
-			const headerArray = getCurrentHeaderArray(name);
-			$("#general_data").append("<a href='#' id='datalink_" + name + "'>" + headerArray.alias + "</a> : " + formatNumberToDisplay(layer.feature.properties[name]) + "<br/>");
-			$("#datalink_" + name).on('click',() => changeDisplayData(undefined, name));
-		}
+		const layersCount = getLayersCount();
+		layer.extremeValues.forEach(function(extreme) {
+			const headerArray = getCurrentHeaderArray(extreme.header);
+			if (names.includes(headerArray.name)) {
+				$("#general_data").append(
+					"<a href='#' class='datalink_" + headerArray.name + "'>" + headerArray.alias + "</a> : " +
+					formatNumberToDisplay(layer.feature.properties[extreme.header]) +
+					" (" + (extreme.rank + 1) + " מתוך " + layersCount + ")<br/>");
+					$(".datalink_" + headerArray.name).on('click',() => changeDisplayData(undefined, headerArray.name));
+			}
+		});
 	}
 
 	function addSpecialData(layer) {
 		$("#special_data").empty();
-		if (layer.extremeValues) {
-			var layersCount = geojsonLayer.getLayers().length;
 
-			layer.extremeValues.forEach(function(extreme) {
-				const headerArray = getCurrentHeaderArray(extreme.header);
-				$("#special_data").append(headerArray.alias + " : " +
+		const maxRankForLowValues = getLayersCount() * 0.1;
+		const minRankForHighValues = getLayersCount() * 0.9;
+		const isExtreme = (val) => val < maxRankForLowValues || val > minRankForHighValues;
+		const names = ['a14','a35','a89'];
+		const layersCount = getLayersCount();
+
+		layer.extremeValues.forEach(function(extreme) {
+			const headerArray = getCurrentHeaderArray(extreme.header);
+			if (names.includes(headerArray.name) && isExtreme(extreme.rank)) {
+				$("#special_data").append(
+					"<a href='#' class='datalink_" + headerArray.name + "'>" + headerArray.alias + "</a> : " +
 					formatNumberToDisplay(layer.feature.properties[extreme.header]) +
 					" (" + (extreme.rank + 1) + " מתוך " + layersCount + ")<br/>");
-			});
-		}
+				$(".datalink_" + headerArray.name).on('click',() => changeDisplayData(undefined, headerArray.name));
+			}
+		});
+
 	}
 
 	function createDataProfileSelect() {
@@ -945,16 +963,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 				return b.value - a.value;
 			});
 
-			for (var i = 0; i < layersCount / 10; i++) {
-				var layer = geojsonLayer.getLayer(profileValues[header][i].id);
-				layer.extremeValues = layer.extremeValues || [];
-				layer.extremeValues.push({
-					header: header,
-					rank: i
-				});
-			}
-
-			for (var i = layersCount - 1; i > layersCount * 0.9; i--) {
+			for (var i = 0; i < layersCount ; i++) {
 				var layer = geojsonLayer.getLayer(profileValues[header][i].id);
 				layer.extremeValues = layer.extremeValues || [];
 				layer.extremeValues.push({

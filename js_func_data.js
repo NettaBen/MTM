@@ -946,16 +946,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 				return b.value - a.value;
 			});
 
-			for (var i = 0; i < layersCount / 10; i++) {
-				var layer = geojsonLayer.getLayer(profileValues[header][i].id);
-				layer.extremeValues = layer.extremeValues || [];
-				layer.extremeValues.push({
-					header: header,
-					rank: i
-				});
-			}
-
-			for (var i = layersCount - 1; i > layersCount * 0.9; i--) {
+			for (var i = 0; i < layersCount ; i++) {
 				var layer = geojsonLayer.getLayer(profileValues[header][i].id);
 				layer.extremeValues = layer.extremeValues || [];
 				layer.extremeValues.push({

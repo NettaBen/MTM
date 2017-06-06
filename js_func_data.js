@@ -575,12 +575,13 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	function addSpecialData(layer) {
 		$("#special_data").empty();
 		if (layer.extremeValues) {
+			var layersCount = geojsonLayer.getLayers().length;
+
 			layer.extremeValues.forEach(function(extreme) {
-				// extreme.header, extreme.rank
 				const headerArray = getCurrentHeaderArray(extreme.header);
 				$("#special_data").append(headerArray.alias + " : " +
 					formatNumberToDisplay(layer.feature.properties[extreme.header]) +
-					" (#" + (extreme.rank + 1) + ")<br/>");
+					" (" + (extreme.rank + 1) + " מתוך " + layersCount + ")<br/>");
 			});
 		}
 	}

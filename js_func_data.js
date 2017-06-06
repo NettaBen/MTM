@@ -468,7 +468,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		div_footer.id = "info_footer";
 		div_footer.innerHTML  = '<div id="muni_sel_container"><select id="muni_sel" class="muni_sel user_action">' + muni_name_options + '</select></div>';
 		div_footer.innerHTML += '<div id="muni_data"><div id="general_data"></div><div id="special_data"></div><div id="external_links_data"></div></div>'
-
+		div_content.innerHTML = '<div id="year_slider"><input id="year_slider_input" type="range" min="2010" max="2015" value="2010" step="1" onchange="$(\'#year_value\').text($(\'#year_slider_input\').val());"><span id="year_value">2010</span></div>';
 		// Add all the elements to the current div.
 		this._div.appendChild(category_select);
 		this._div.appendChild(category_col_select);
@@ -535,7 +535,8 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 				extra_info += ui_strings['external_info'] + '<br>';
 		}
 		var city_info =  update_city_info(props, extra_info);
-		document.getElementById('info_content').innerHTML = city_info;
+		$("#city_info").empty();
+		$("#info_content").append(city_info);
 	};
 
 	//function toggleExpandedView(e) {
@@ -917,6 +918,14 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		document.getElementById('columns_container').style.display = 'none';
 		document.querySelector('#info_header').style.display = '';
 		toggleShowTableContainer();
+
+		const appartment_price_per_year_names = ["z3","z4","z5","z6","z7","z8"];
+		if (appartment_price_per_year_names.includes(current_comn_name)) {
+			$("#year_slider").show();
+		} else {
+			$("#year_slider").hide();
+		}
+
 	}
 
 	function createFilter(event, ui) {
@@ -1038,6 +1047,9 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		document.getElementById("cat_sel").addEventListener("click", categoryClick);
 		document.querySelector(".next_data.change_data").addEventListener("click", changeDisplayData);
 		document.querySelector(".prev_data.change_data").addEventListener("click", changeDisplayData);
+
+		document.getElementById("year_slider_input").addEventListener("change", updateYear);
+
 
 		var curr_cat_id = getCurrentHeaderArray().cat_id;
 
@@ -1531,6 +1543,16 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	// TODO: Fix geojsonLayer to mainLayer as a function variable. Create default bounds (mainLayer problem/no bounds)
 	function zoomToLayer() {
 		map.fitBounds(geojsonLayer.getBounds());
+	}
+
+	function updateYear(e) {
+		const appartment_price_per_year_names = ["z3","z4","z5","z6","z7","z8"];
+		const year_to_display_data = {2010: "z3",2011: "z4", 2012: "z5", 2013: "z6", 2014: "z7", 2015: "z8"};
+		if (appartment_price_per_year_names.includes(current_comn_name)) {
+			const year = $("#year_slider_input").val()*1;
+			const new_display_data = year_to_display_data[year];
+			changeDisplayData(undefined, new_display_data);
+		}
 	}
 
 	function toggleCircles() {

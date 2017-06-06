@@ -573,6 +573,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	}
 
 	function addSpecialData(layer) {
+		$("#special_data").empty();
 		if (layer.extremeValues) {
 			layer.extremeValues.forEach(function(extreme) {
 				// extreme.header, extreme.rank

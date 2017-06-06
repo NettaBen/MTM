@@ -457,8 +457,8 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		div_content.id = "info_content";
 		var div_footer = L.DomUtil.create('div', 'minimized');
 		div_footer.id = "info_footer";
-		div_footer.innerHTML  = '<div id="muni_sel_container"><select id="muni_sel" class="muni_sel user_action">' + muni_name_options + '</select><div id="muni_sel_data"></div></div>';
-
+		div_footer.innerHTML  = '<div id="muni_sel_container"><select id="muni_sel" class="muni_sel user_action">' + muni_name_options + '</select></div>';
+		div_footer.innerHTML += '<div id="muni_data"></div>'
 
 		// Add all the elements to the current div.
 		this._div.appendChild(category_select);

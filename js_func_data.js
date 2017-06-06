@@ -281,7 +281,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 
 			// Initiate the municipalities selector with a reference to the layer id.
 			geojsonLayer.eachLayer(function (layer) {
-				muni_name_options += "<option data-id='" + layer._leaflet_id + "' value='" + layer.feature.properties[name_prop] + "'>" + layer.feature.properties[name_prop] + "</option>";
+				muni_name_options += "<option data-id='" + layer._leaflet_id + "' value='" + layer._leaflet_id + "'>" + layer.feature.properties[name_prop] + "</option>";
 			});
 			changeColorByAttr(geojsonLayer, current_comn_name/*, undefined, undefined*/);
 			// Initiate the total number of layer entities (cities).
@@ -358,7 +358,7 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		layer.on({
 			mouseover: highlightFeature,
 			mouseout: resetHighlight,
-			click: zoomToFeature,
+			click: onFeatureClick,
 			dblclick: selectFeature
 		});
 		// Add the internal layer attributes for all features (layer) elements.
@@ -796,6 +796,12 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			});
 		}
 		info.update();
+	}
+
+	function onFeatureClick(e) {
+		zoomToFeature(e);
+		$('#muni_sel').val(e.target._leaflet_id);
+		changeMuniSelect(e.target);
 	}
 
 	function zoomToFeature(e) {

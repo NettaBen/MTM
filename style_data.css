@@ -919,6 +919,10 @@ th.index-col > div {
 
 }
 
+.minimized #muni_data {
+	display: none;
+}
+
 #muni_data > div {
 	border: 1px lightgrey solid;
 	margin-bottom: 2px;

@@ -557,10 +557,10 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 
 	function addGeneralData(layer) {
 		$("#general_data").empty();
-		const names = ["c1", "c2", "c3"];
+		const names = ["a14", "a15", "a230", "a33", "a34"];
 		for (const name of names) {
 			const headerArray = getCurrentHeaderArray(name);
-			$("#general_data").append(headerArray.alias + " : " + layer.feature.properties[name] + "<br/>");
+			$("#general_data").append(headerArray.alias + " : " + formatNumberToDisplay(layer.feature.properties[name]) + "<br/>");
 		}
 	}
 

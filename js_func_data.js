@@ -18,6 +18,8 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	var classy_method = 'jenks';
 	var data_timer = '';
 	var bubble_timer = '';
+	var chartsContainer;
+	var charts = {};
 	//var display_normalize_bubbles = 5;
 	var no_data_color = "lightgrey";
 	var disabled_options_array = [];
@@ -125,6 +127,26 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	});
 
 	var profileHeaders = ["a14", "a15", "a230", "a33", "a34", "a35", "a89"];
+
+	var chartsConfig = {
+		ages_chart: {
+			a24: '0-4',
+			a25: '5-9',
+			a26: '10-14',
+			a27: '15-19',
+			a28: '20-29',
+			a29: '30-44',
+			a30: '45-59',
+			a31: '60-64',
+			a32: '65+'
+		},
+		religions_chart: {
+			a16: 'יהודים',
+			a18: 'מוסלמים',
+			a19: 'נוצרים',
+			a20: 'דרוזים'
+		}
+	};
 
 	var baseLayers = {
 		"Streets": streets,
@@ -469,6 +491,19 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		div_footer.innerHTML  = '<div id="muni_sel_container"><select id="muni_sel" class="muni_sel user_action">' + muni_name_options + '</select></div>';
 		div_footer.innerHTML += '<div id="muni_data"><div id="general_data"></div><div id="special_data"></div><div id="external_links_data"></div></div>'
 
+		// Initialize chart container
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(function(){
+			chartsContainer = document.createElement('div');
+			chartsContainer.className = 'charts-container';
+			for (var key in chartsConfig) {
+				var element = document.createElement('div');
+				element.className = 'chart-' + key;
+				charts[key] = new google.visualization.PieChart(element);
+				chartsContainer.appendChild(element);
+			}
+		});
+
 		// Add all the elements to the current div.
 		this._div.appendChild(category_select);
 		this._div.appendChild(category_col_select);
@@ -579,7 +614,37 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 					$(".datalink_" + headerArray.name).on('click',() => changeDisplayData(undefined, headerArray.name));
 			}
 		});
+		addCharts(layer);
 	}
+
+	function addCharts(layer) {
+		$('#general_data').append(chartsContainer);
+
+		for (var key in chartsConfig) {
+			var values = [['metric', 'value']];
+			for (header in chartsConfig[key]) {
+				var value = eliminateStringsInNumbers(layer.feature.properties[header]);
+				if (value) {
+					values.push([
+						chartsConfig[key][header],
+						value
+					]);
+				}
+			};
+
+			if (values.length > 1 && charts[key]) {
+				var data = google.visualization.arrayToDataTable(values);
+				charts[key].draw(data, {
+					title: ui_strings[key],
+					backgroundColor: 'transparent',
+					legend: 'none',
+					tooltip: {
+						ignoreBounds: true
+					}
+				});
+			}
+		}
+	};
 
 	function addSpecialData(layer) {
 		$("#special_data").empty();
@@ -2201,6 +2266,8 @@ var ui_strings =
 		"external_info" : '<b>נתוני בריאות הציבור</b><br> הנתונים נאספו ע"י גיא זומר<br>',
 		"external_info_array" : {"בריאות" : '<b>נתוני בריאות הציבור</b><br> הנתונים נאספו ע"י גיא זומר<br>', 'בינוי' : '<b>נתוני משרד הבינוי</b><br> הנתונים נאספו ע"י גיא זומר<br>'
 			, 'פשיעה' : '<b>המפה מבוססת על כמות אירועים שנפתחו במשטרת ישראל בשנים 2012-2015, על בסיס בקשת מידע שנענתה, ביחס לכמות התושבים ברשות המקומית בהתאם לנתוני הלמ"ס </b><br> הנתונים נאספו ע"י גיא זומר<br>'},
+		"ages_chart": "התפלגות גילאים",
+		"religions_chart": "התפלגות דת",
 	};
 var ui_strings_w_yarok =
 	{

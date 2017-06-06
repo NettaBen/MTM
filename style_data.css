@@ -922,9 +922,11 @@ th.index-col > div {
 #muni_data > div {
 	border: 1px lightgrey solid;
 	margin-bottom: 2px;
+	text-align: right;
 }
 
 #muni_data > div::before {
+	text-align: center;
 	display: block;
 	font-weight: bold;
 }

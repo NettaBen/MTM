@@ -94,6 +94,8 @@ body {
 	width: 220px;
 	font-size: 16px;
 	padding: 4px;
+	border-right: 1px black solid;
+    border-left: 1px black solid;
 }
 .legend {
 	text-align: left;
@@ -493,8 +495,7 @@ tbody.overflow {
 	text-align: center;
 	margin-top: 4px;
 	font-size: 12px;
-	color: #777;
-	display: none;
+	color: #777;	
 }
 
 #city_info {
@@ -509,7 +510,8 @@ tbody.overflow {
 }
 
 #info_footer.expanded {
-	height: 400px;
+	height: auto;
+	max-height: inherit;
 }
 
 #info_footer {
@@ -583,10 +585,13 @@ a.about {
 }
 
 #cat_sel, #muni_sel {
+	width: 100%;
+	/*Center the selected option text.*/
+	text-align-last:center;
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
     /*border: none;*/
-    color: grey;
+    /*color: grey;*/
     font-weight: bold;
     margin-bottom: 5px;
 	/*outline: none;*/
@@ -596,13 +601,23 @@ a.about {
    -moz-appearance: none;
    appearance: none;       /* remove default arrow */
    padding: 5px 10px;
+   
+}
+
+#cat_sel {
+	background-color: #467cd1;	
+	color: white;
+}
+#cat_sel option{
+	background-color: white;	
+	color:  #467cd1;
 }
 
 #muni_sel {
 	margin-top: 10px;
-	margin-bottom: 4px;
-	max-width: 80%;
+	margin-bottom: 4px;	
 	white-space : pre-wrap;
+	background-color: #dce6ef;
 }
 #muni_sel option {
 	/*max-width : 80px;	*/
@@ -620,10 +635,7 @@ span#info_header {
 }
 
 .change_data {
-    margin-top: 1px;
-	margin-bottom: -4px;
-    margin-right: 4px;
-    margin-left: 4px;
+	margin: auto 3px;
 	font-size: 30px;
     color: #aaa;
     cursor: pointer;
@@ -931,6 +943,11 @@ th.index-col > div {
 	text-align: right;
 }
 
+
+#muni_data  a {
+	color: #365899;
+}
+
 #muni_data > div::before {
 	text-align: center;
 	display: block;
@@ -938,11 +955,19 @@ th.index-col > div {
 }
 
 #general_data::before {
-	content: "General data"
+	content: "מידע מסכם";
+	margin-bottom: 5px;
 }
 #special_data::before {
-  content: "Special data"
+  content: "נתונים יחודיים";
+  margin-bottom: 5px;
 }
+
+#special_data {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 #external_links_data::before {
   content: "External Links Data"
 }
@@ -950,4 +975,16 @@ th.index-col > div {
 #year_slider {
 	text-align: center;
 	direction: ltr;
+}
+.percent_fill{
+    height:20px;
+	text-align: center;
+    /*background: linear-gradient(to right, #efe3af 75%,#ffffff 75%);*/
+    border:1px solid rgba(119, 119, 119, 0.25);
+	font-size: 12px;
+}
+
+#general_data > div {
+    margin-bottom: 10px;
+    margin-top: 8px;	
 }

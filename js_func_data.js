@@ -63,8 +63,9 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	var info_pos = rtl > 0 ? 'topleft' : 'topright';
 	var legend_pos = rtl > 0 ? 'bottomright' : 'bottomleft';
 	var gen_btns_pos = rtl > 0 ?  'bottomleft' : 'bottomright';
-	console.log(control_btns_pos);
-
+	//console.log(control_btns_pos);
+	
+	var all_profile_sorted = [];
 	var names_list = ['muni_heb', 'Muni_Eng', 'a1',  'LocalityCo', 'a2',  'name',  'd_name' ];
 	// TODO: remove and pass as param
 	if (!curr_leaf) {
@@ -125,8 +126,9 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		subdomains:['mt0','mt1','mt2','mt3'],
 		opacity: 0.5
 	});
-
+	// TODO: Change to all headers.
 	var profileHeaders = ["a14", "a15", "a230", "a33", "a34", "a35", "a89"];
+	var profileHeadersAll = [];
 
 	var chartsConfig = {
 		ages_chart: {
@@ -140,12 +142,12 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			a31: '60-64',
 			a32: '65+'
 		},
-		religions_chart: {
+		/*religions_chart: {
 			a16: 'יהודים',
 			a18: 'מוסלמים',
 			a19: 'נוצרים',
 			a20: 'דרוזים'
-		}
+		}*/
 	};
 
 	var baseLayers = {
@@ -299,17 +301,21 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			map.removeLayer(geojsonLayer); // Re initiate the loaded layers.
 			map.addLayer(geojsonLayer);
 
-			prepareExtremeValues();
-
+			//prepareExtremeValues();
+			writeExtremeValues();
+			var all_extreme_value = {};
 			// Initiate the municipalities selector with a reference to the layer id.
 			geojsonLayer.eachLayer(function (layer) {
 				muni_name_options += "<option data-id='" + layer._leaflet_id + "' value='" + layer._leaflet_id + "'>" + layer.feature.properties[name_prop] + "</option>";
+				//all_extreme_value[layer._leaflet_id] = layer.extremeValues;
+				//console.log(layer.extremeValues);
 			});
+			//console.log(JSON.stringify(all_extreme_value));
 			changeColorByAttr(geojsonLayer, current_comn_name/*, undefined, undefined*/);
 			// Initiate the total number of layer entities (cities).
 			feature_group_length = geojsonLayer.getLayers().length;
 			// Info divs and base layer.
-			addControlElements();
+			addControlElements();			
 			displayNormalizeBubble();
 			toggleShowTableContainer();
 			zoomToLayer();
@@ -454,10 +460,11 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 
 		// Create the paging objects.
 		var next_data = L.DomUtil.create('div', 'next_data change_data');
-		next_data.innerHTML = rtl > 0 ? '☚' :'☛';
-		next_data.title = ui_objects_titles['prev_data'];
+		//next_data.innerHTML = rtl > 0 ? '☚' :'☛';		
+		next_data.innerHTML = rtl > 0 ? '⋙' :'⋘';
 		var prev_data = L.DomUtil.create('div', 'prev_data change_data');
-		prev_data.innerHTML = rtl > 0 ? '☛' :'☚';
+		//prev_data.innerHTML = rtl > 0 ? '☛' :'☚';
+		prev_data.innerHTML = rtl > 0 ? '⋙' :'⋙';
 		prev_data.title = ui_objects_titles['next_data'];
 
 		// create the select column element.
@@ -489,8 +496,11 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		var div_footer = L.DomUtil.create('div', 'minimized');
 		div_footer.id = "info_footer";
 		div_footer.innerHTML  = '<div id="muni_sel_container"><select id="muni_sel" class="muni_sel user_action">' + muni_name_options + '</select></div>';
-		div_footer.innerHTML += '<div id="muni_data"><div id="general_data"></div><div id="special_data"></div><div id="external_links_data"></div></div>'
-		div_content.innerHTML = '<div id="year_slider"><input id="year_slider_input" type="range" min="2010" max="2015" value="2010" step="1" onchange="$(\'#year_value\').text($(\'#year_slider_input\').val());"><span id="year_value">2010</span></div>';
+		//div_footer.innerHTML += '<div id="muni_data"><div id="general_data"></div><div id="special_data"></div><div id="external_links_data"></div></div>'
+		div_footer.innerHTML += '<div id="muni_data"><div id="general_data"></div><div id="special_data"></div></div>';
+		// TODO: Change min/max values.
+		div_content.innerHTML = '<div class="sub_info"></div><div id="year_slider"><input id="year_slider_input" type="range" min="2010" max="2015" value="2010" step="1" ' 
+			+ 'onchange="$(\'#year_value\').text($(\'#year_slider_input\').val());"><span id="year_value"></span></div>';
 
 		// Initialize chart container
 		google.charts.load('current', {'packages':['corechart']});
@@ -570,15 +580,21 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			else
 				extra_info += ui_strings['external_info'] + '<br>';
 		}
-		var city_info =  update_city_info(props, extra_info);
+		//var city_info =  update_city_info(props, extra_info);
 		$("#city_info").empty();
-		$("#info_content").append(city_info);
+		//$("#info_content").append(city_info);
+		//$(".sub_info").append(extra_info);
+		//$(".sub_info").append('<div class="sub_info"> ' + extra_info  + (isMobile ? ui_strings['empty_info_sub_title_mobile'] : ui_strings['empty_info_sub_title']) + '</div>');
+		//document.querySelector('.sub_info').innerHTML =  extra_info  + (isMobile ? ui_strings['empty_info_sub_title_mobile'] : ui_strings['empty_info_sub_title']);
+		document.querySelector('.sub_info').innerHTML =  extra_info;
+		yearSliderControl();		
 	};
 
 	//function toggleExpandedView(e) {
 	function openMuniProfile(e) {
 		var info_footer = document.getElementById("info_footer");
-		var info_footer_select = e.target;
+		//var info_footer_select = e.target;
+		var info_footer_select = document.getElementById("muni_sel");
 
 		if(info_footer.classList.contains("minimized")) {
 			info_footer.classList.remove("minimized");
@@ -603,20 +619,84 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 	}
 
 	function addGeneralData(layer) {
-		$("#general_data").empty();
+		$("#general_data").empty();		
 		const names = ["a14", "a15", "a230", "a33", "a34"];
+		if (!names.includes(current_comn_name))
+			names.unshift(current_comn_name);
 		const layersCount = getLayersCount();
-		layer.extremeValues.forEach(function(extreme) {
-			const headerArray = getCurrentHeaderArray(extreme.header);
+		//console.log(extremeValues);
+		//layer.extremeValues.forEach(function(extreme) {
+		names.forEach(function(name) {
+			//const headerArray = getCurrentHeaderArray(extreme.header);
+			const headerArray = getCurrentHeaderArray(name);
+			//console.log(layer.extremeValues);
+			//const extreme = layer.extremeValues[name];
+			const extreme = getCurrentExtremeArray(layer, name);
+			//console.log(headerArray);
+			//debugger;
 			if (names.includes(headerArray.name)) {
 				$("#general_data").append(
-					"<a href='#' class='datalink_" + headerArray.name + "'>" + headerArray.alias + "</a> : " +
-					formatNumberToDisplay(layer.feature.properties[extreme.header]) +
-					" (" + (extreme.rank + 1) + " מתוך " + layersCount + ")<br/>");
-					$(".datalink_" + headerArray.name).on('click',() => changeDisplayData(undefined, headerArray.name));
+					"<a href='#' id='datalink_" + headerArray.name + "' class='datalink_" + headerArray.name + "'>" + headerArray.alias + "</a>" +
+					"<div id='percent_fill" + headerArray.name + "' class='percent_fill' data-rank_per='" + (extreme.rank + 1 / layersCount) + "' >" + formatNumberToDisplay(layer.feature.properties[extreme.header]) +
+					" (" + (extreme.rank + 1) + "/" + layersCount + ")</div>");
+					//$(".datalink_" + headerArray.name).on('click',() => changeDisplayData(undefined, headerArray.name));
+					document.getElementById("datalink_" + headerArray.name).addEventListener('click', function () { changeDisplayData(undefined, headerArray.name)});
+					// TODO: Extract to ui funcions.
+					var curr_per = Math.round(((extreme.rank + 1) / layersCount)*100);					
+					var fill_per = 100 - fill_per;
+					//console.log(fill_per);
+					
+					$("#percent_fill" + headerArray.name).css({'background': 'linear-gradient(to left, rgba(51, 102, 204, 0.7) ' + curr_per + '% ,#ffffff ' + curr_per + '%)'});					
 			}
+			
+			//console.log($( window.getComputedStyle($("#percent_fill" + headerArray.name).get(0), null)));
 		});
 		addCharts(layer);
+	}
+	
+	function addSpecialData(layer) {
+		$("#special_data").empty();
+
+		const maxRankForLowValues = getLayersCount() * 0.1;
+		const minRankForHighValues = getLayersCount() * 0.9;
+		// TODO: Change to coherent function.
+		const isExtreme = (val) => val < maxRankForLowValues || val > minRankForHighValues;
+		//const names = ['a14','a35','a89'];
+		const names = profileHeadersAll;
+		//console.log(names);
+		const layersCount = getLayersCount();
+
+		//layer.extremeValues.forEach(function(extreme) {
+		names.forEach(function(name) {
+			//console.log(name);
+			const headerArray = getCurrentHeaderArray(name);
+			//console.log(layer.extremeValues);
+			//const extreme = layer.extremeValues[name];
+			const extreme = getCurrentExtremeArray(layer, name);
+			//console.log(headerArray);
+			//const headerArray = getCurrentHeaderArray(extreme.header);
+			//debugger;
+			if (headerArray && names.includes(headerArray.name) && isExtreme(extreme.rank) && eliminateStringsInNumbers(layer.feature.properties[extreme.header])) {
+				$("#special_data").append(
+					//"<a href='#' class='datalink_" + headerArray.name + "'>" + headerArray.alias + "</a> : " +
+					//formatNumberToDisplay(layer.feature.properties[extreme.header]) +
+					//" (" + (extreme.rank + 1) + "/" + layersCount + ")<br/>"
+					"<a href='#' id='datalink_" + headerArray.name + "' class='datalink_" + headerArray.name + "'>" + headerArray.alias + "</a>" +
+					"<div id='s_percent_fill" + headerArray.name + "' class='percent_fill' data-rank_per='" + (extreme.rank + 1 / layersCount) + "' >" + formatNumberToDisplay(layer.feature.properties[extreme.header]) +
+					" (" + (extreme.rank + 1) + "/" + layersCount + ")</div>"					
+					);
+				//$(".datalink_" + headerArray.name).on('click',() => changeDisplayData(undefined, headerArray.name));
+				document.getElementById("datalink_" + headerArray.name).addEventListener('click', function () { changeDisplayData(undefined, headerArray.name)});
+				var curr_per = Math.round(((extreme.rank + 1) / layersCount)*100);					
+				var fill_per = 100 - parseInt(curr_per);
+					//console.log(fill_per);
+					//console.log(curr_per);
+				//$("#s_percent_fill" + headerArray.name).css({'background': 'linear-gradient(to right, rgba(51, 102, 204, 0.7) ' + fill_per + '% ,#ffffff ' + fill_per + '%)'});		
+				$("#s_percent_fill" + headerArray.name).css({'background': 'linear-gradient(to left, rgba(51, 102, 204, 0.4) ' + fill_per + '% ,rgba(51, 102, 204, 0.9) ' + fill_per + '%)'});		
+				//$("#s_percent_fill" + headerArray.name).css({'background': 'linear-gradient(to left, rgba(51, 102, 204, 0.7) ' + fill_per + '%)'});		
+				//$("#s_percent_fill" + headerArray.name).css({'background': 'linear-gradient(to right, rgba(51, 51, 204, 0.7) ' + curr_per + '%)'});		
+			}
+		});
 	}
 
 	function addCharts(layer) {
@@ -646,28 +726,6 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 				});
 			}
 		}
-	};
-
-	function addSpecialData(layer) {
-		$("#special_data").empty();
-
-		const maxRankForLowValues = getLayersCount() * 0.1;
-		const minRankForHighValues = getLayersCount() * 0.9;
-		const isExtreme = (val) => val < maxRankForLowValues || val > minRankForHighValues;
-		const names = ['a14','a35','a89'];
-		const layersCount = getLayersCount();
-
-		layer.extremeValues.forEach(function(extreme) {
-			const headerArray = getCurrentHeaderArray(extreme.header);
-			if (names.includes(headerArray.name) && isExtreme(extreme.rank)) {
-				$("#special_data").append(
-					"<a href='#' class='datalink_" + headerArray.name + "'>" + headerArray.alias + "</a> : " +
-					formatNumberToDisplay(layer.feature.properties[extreme.header]) +
-					" (" + (extreme.rank + 1) + " מתוך " + layersCount + ")<br/>");
-				$(".datalink_" + headerArray.name).on('click',() => changeDisplayData(undefined, headerArray.name));
-			}
-		});
-
 	}
 
 	function createDataProfileSelect() {
@@ -884,8 +942,10 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 
 	function onFeatureClick(e) {
 		zoomToFeature(e);
-		$('#muni_sel').val(e.target._leaflet_id);
-		changeMuniSelect(e.target);
+		document.getElementById("muni_sel").value = e.target._leaflet_id;			
+		openMuniProfile();
+		//$('#muni_sel').val(e.target._leaflet_id);
+		//changeMuniSelect(e.target);
 	}
 
 	function zoomToFeature(e) {
@@ -985,12 +1045,12 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		document.querySelector('#info_header').style.display = '';
 		toggleShowTableContainer();
 
-		const appartment_price_per_year_names = ["z3","z4","z5","z6","z7","z8"];
+		/*const appartment_price_per_year_names = ["z3","z4","z5","z6","z7","z8"];
 		if (appartment_price_per_year_names.includes(current_comn_name)) {
 			$("#year_slider").show();
 		} else {
 			$("#year_slider").hide();
-		}
+		}*/
 
 	}
 
@@ -1022,31 +1082,59 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 
 	function prepareExtremeValues() {
 		var profileValues = {};
+		// Create an array with all the column system names.
+		for (ds in header_name_to_alias) {
+			profileHeadersAll.push(header_name_to_alias[ds].name);						
+		}
+		//console.log(profileHeadersAll);
 		geojsonLayer.eachLayer(function (layer) {
-			profileHeaders.forEach(function (header) {
+			//profileHeaders.forEach(function (header) {
+			profileHeadersAll.forEach(function (header) {
 				profileValues[header] = profileValues[header] || [];
 				profileValues[header].push({
 					id: layer._leaflet_id,
+					//value: eliminateStringsIfNumbers(layer.feature.properties[header])
 					value: layer.feature.properties[header]
 				});
 			});
 		});
 
 		var layersCount = geojsonLayer.getLayers().length;
-		profileHeaders.forEach(function (header) {
-			profileValues[header].sort(function(a, b) {
-				return b.value - a.value;
-			});
-
-			for (var i = 0; i < layersCount ; i++) {
-				var layer = geojsonLayer.getLayer(profileValues[header][i].id);
-				layer.extremeValues = layer.extremeValues || [];
-				layer.extremeValues.push({
-					header: header,
-					rank: i
+		//profileHeaders.forEach(function (header) {
+		profileHeadersAll.forEach(function (header) {
+			if (header) {
+				profileValues[header].sort(function(a, b) {
+					
+					//const c = eliminateStringsIfNumbers(a);
+					//const d = eliminateStringsIfNumbers(b);				
+					//return a.value - b.value;
+					return eliminateStringsIfNumbers(b.value) - eliminateStringsIfNumbers(a.value);
 				});
-			}
+				all_profile_sorted[header] = profileValues[header];
+				//console.log(header);
+				//console.log(profileValues[header]);
+				for (var i = 0; i < layersCount ; i++) {
+					var layer = geojsonLayer.getLayer(profileValues[header][i].id);
+					layer.extremeValues = layer.extremeValues || [];
+					layer.extremeValues.push({
+						header: header,
+						rank: i
+					});
+				}
+			}			
 		});
+		//console.log(all_profile_sorted);
+	}
+	
+	function writeExtremeValues() { 
+		for (ds in header_name_to_alias) {
+			profileHeadersAll.push(header_name_to_alias[ds].name);						
+		}
+		geojsonLayer.eachLayer(function (layer) { 
+			layer.extremeValues = e_ex_values[layer._leaflet_id];
+		
+		})
+		
 	}
 
 	function addControlElements() {
@@ -1138,7 +1226,17 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		legend.update();
 		createLegendEventListeners();
 		displayNormalizeBubble();
-		displayTableBubble();
+		displayTableBubble();		
+	}
+	
+	function yearSliderControl() {		
+		if (getCurrentHeaderArray().temporal > 0) {
+			$("#year_slider").show();			
+			document.getElementById("year_slider_input").value = getCurrentHeaderArray().temporal;
+			document.getElementById("year_value").innerHTML = getCurrentHeaderArray().temporal;					
+		} else {
+			$("#year_slider").hide();
+		}
 	}
 
 	function displayNormalizeBubble() {
@@ -1716,6 +1814,14 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 		});
 		return result[0];
 	}
+	
+	function getCurrentExtremeArray(layer, col_name) {
+		var result = layer.extremeValues.filter(function( obj ) {
+			return obj.header === col_name;
+		});
+		return result[0];
+		//return display_name = (typeof(result[0]) != "undefined") ? result[0].alias : current_comn_name;
+	}
 
 	function shortColumnTitle(title) {
 		return title.substring(0,150);
@@ -1940,6 +2046,9 @@ function leafletGeoBrew (filename, current_comn_name, default_color, name_prop, 
 			map.flyToBounds(
 				geojsonLayer.getLayer(data_id).getBounds(),
 				{duration: 0.6});
+			document.getElementById("muni_sel").value = data_id;			
+			openMuniProfile();
+			//changeMuniSelect(geojsonLayer.getLayer(data_id));		
 		}
 	}
 

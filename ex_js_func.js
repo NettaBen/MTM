@@ -19,6 +19,7 @@ function parseCSVByObject(external_data_def) {
 			var start_line = external_data_def.start_line;
 			var cat_line = external_data_def.cat_line;
 			var source_line = external_data_def.source_line;
+			var temporal_line = external_data_def.temporal_line;
 			var column_action_line = external_data_def.column_action_line;									
 			var len = results.data.length;
 			
@@ -26,13 +27,14 @@ function parseCSVByObject(external_data_def) {
 			var curr_cat = cat_line >= 0 ? results.data[cat_line][start_col] : ui_strings['external_cat'] ;
 			//console.log(curr_cat);
 			var curr_cat_id = external_cat - 1;
-			var source = '';
+			var source,temporal = '';
 			// Create the new columns array.												
 			//external_header_options[curr_cat_id] = '';
 			for (var z=start_col; z < results.data[header_line].length ; z++) {
 				
 				var action = (!column_action_line || results.data[column_action_line][z] == 0)  ? 4 : 0;					
 				source = (source_line >=0)  ? results.data[source_line][z] : '';					
+				temporal = (temporal_line >=0)  ? results.data[temporal_line][z] : '';					
 				// Create new cat options and array.
 				if (cat_line >= 0 && (!(curr_cat === results.data[cat_line][z]) || z==start_col)) {					
 					//console.log(results.data[cat_line][z]);
@@ -44,7 +46,7 @@ function parseCSVByObject(external_data_def) {
 				var cat_id = cat_line >= 0  ? curr_cat_id : external_cat;										
 				//new_cats[z] = cat_id;	
 				new_headers[z] = 
-					{"action_col" : action, "alias" : results.data[header_line][z], "cat_id": cat_id, "col_type":"float", "name": "z"+z, "source" : source};					
+					{"action_col" : action, "alias" : results.data[header_line][z], "cat_id": cat_id, "col_type":"float", "name": "z"+z, "source" : source, "temporal" : temporal};					
 				external_header_options[cat_id] += '<option data-col_name="' + "z"+z + '" '
 					+ 'data-min-val="" data-max_val="" data-cat_id="' + cat_id + '" data-source_name="' + source + '">' + results.data[header_line][z] + '</option>';
 			}

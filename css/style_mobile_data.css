@@ -1,0 +1,156 @@
+body {
+	min-width: 200px;
+}
+#map, #map.wide_map { 
+	margin: 0 0 0 2%;
+	width: 97% !important; 
+	height: 97%; 
+	margin: none;	
+	/*margin: 0 auto;*/
+	/*visibility: hidden;*/
+}
+
+#data_proc {
+	direction: rtl;
+	vertical-align : top;	
+    width: 100%;
+    /*min-width: 30%;*/
+    height: 95%;    
+    border-radius: 5px;
+	display: block;   
+	/*z-index: 1050;*/
+	position : absolute;	
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 2000;	
+}
+
+#ui-id-3 {
+	z-index: 2001;
+}
+
+
+body{
+ [data-balloon]:after,
+ [data-balloon]:before { display: none; }
+}
+
+#data_proc_control1 {
+	position: absolute;
+	top: 0%;
+}
+
+.legend-line {
+    /*display: inline-block;*/
+    line-height: 18px;
+	margin: 0px 4px;
+}
+
+#col_filter_select_custom-combobox > input
+/*input.custom-combobox-input.ui-widget.ui-widget-content.ui-state-default.ui-corner-left.ui-autocomplete-input*/ {
+	max-width: 142px !important;
+}
+
+.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front {
+    z-index: 1000;
+    font-size: 14px;
+    direction: rtl;
+	padding: 0px; 
+    max-height: 200px;
+    max-width: 141px !important;
+    overflow-y: auto;  	
+}
+
+.leaflet-top.leaflet-right {
+    max-width: 180px;
+}
+.leaflet-bottom.leaflet-right {
+	margin-bottom: 45px;    
+}
+
+.filter { 
+    max-width: 137px;
+    padding: 1px 3px 1px 0px;
+}
+
+.info.legend.leaflet-control {
+    /*max-width: 160px;
+	width: 30%;*/
+    /*float: left;*/
+}
+
+select {
+    -webkit-appearance: none;
+}
+
+#col_actions {    
+    /*display: block;    */
+}
+
+#reclassify {
+    right: 4%;
+    padding-left: 10px;    
+}
+
+#reclassifyb {
+    left: 4%;
+    padding-right: 10px;    
+}
+
+.reclassify {
+	font-size: 40px;
+    margin-top: -10px;
+}
+
+#loading-image {
+	height: 50%;
+	width: 95%;
+}
+
+#col_select_custom-combobox > input {
+	width: 200px !important;
+}
+
+#ui-id-1 {
+	max-width: 195px !important;
+}
+
+span#info_header {
+    /*display: inline-flex;*/
+    width: 200px;
+}
+
+.info h4 {
+	font-weight: normal;
+	font-size: 14px;
+}
+
+#cat_sel {
+	font-weight: normal;
+	font-size: 14px;
+	direction: rtl;
+	unicode-bidi: bidi-override; 
+}
+
+#selected_features_table {
+	font-size: 12px;
+}
+
+#open_help {
+	left: 2%;
+	bottom: 5px;
+}
+
+#map_header {
+	width: 100%;
+	left: 0;
+	font-size: 16px;
+}
+
+.modal-content {
+	width: 80%;
+}
+
+.fb-like {
+	left: 10% !important;
+}

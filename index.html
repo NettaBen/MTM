@@ -7,33 +7,33 @@
 	<meta name="viewport" content="width=device-width, initial-scale=0.8">
 	<link rel="icon" type="image/ico" href="favicon.ico">
 	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
-	<link rel="stylesheet" href="style_data.css?v=1.1" />
-	<link rel='stylesheet' media='screen and (max-device-width: 800px)' href='style_mobile_data.css?v=1.11'>
-	<link rel='stylesheet'  href='balloon.css'>
+	<link rel="stylesheet" href="css/style_data.css?v=1.1" />
+	<link rel='stylesheet' media='screen and (max-device-width: 800px)' href='css/style_mobile_data.css?v=1.11'>
+	<link rel='stylesheet'  href='vendor/balloon.css'>
 	<link rel="stylesheet" href="css/jquery-ui.css" />
 	<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.10.1/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="table_vars.js?v=1.2"></script>
-	<script type="text/javascript" src="js_func_data.js?v=1.2"></script>
-	<script type="text/javascript" src="ex_js_func.js?v=1.2"></script>
-	<script type="text/javascript" src="ext_values.js?v=1.2"></script>
+	<script type="text/javascript" src="src/static/table_vars.js?v=1.2"></script>
+	<script type="text/javascript" src="src/main/js_func_data.js?v=1.2"></script>
+	<script type="text/javascript" src="src/main/ex_js_func.js?v=1.2"></script>
+	<script type="text/javascript" src="src/static/ext_values.js?v=1.2"></script>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 	<!--<link rel="stylesheet" href="leaflet.css" />-->
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 	<script src="https://www.gstatic.com/charts/loader.js"></script>
-	<link rel="stylesheet" href="Control.Geocoder.css" />
-	<script src="Control.Geocoder.js"></script>
-	<link rel="stylesheet" href="Control.Opacity.css" />
-	<script src="Control.Opacity.js"></script>
+	<link rel="stylesheet" href="vendor/Control.Geocoder.css" />
+	<script src="vendor/Control.Geocoder.js"></script>
+	<link rel="stylesheet" href="vendor/Control.Opacity.css" />
+	<script src="vendor/Control.Opacity.js"></script>
 	<!--<script src="leaflet.js"></script>-->
 	<!--<script src="proj4.js"></script>
 	<script src="proj4leaflet.js"></script>
 	<script src="EPSG2039.js"></script>-->
-	<script src="leaflet.ajax.js"></script>
+	<script src="vendor/leaflet.ajax.js"></script>
 	<!--<script src="classybrew_c_min.js"></script>-->
-	<script src="classybrew.js"></script>
+	<script src="vendor/classybrew.js"></script>
 	<script src="dist/papaparse.min.js"></script>
-	<script src="js.cookie.js"></script>
+	<script src="vendor/js.cookie.js"></script>
 	<style>
 	</style>
 	 <script>  </script>
@@ -144,7 +144,7 @@
 	document.getElementById("col_filter_select").innerHTML = "<option></option>" + header_options;
 	document.getElementById("data_col_select0").innerHTML = "<option></option>" + header_options;
 
-	var external_data_def = {"external_filename" : "all_external_fixed.csv", "name_column" : 0, "id_column" : -1, "header_line" : 4,
+	var external_data_def = {"external_filename" : "src/static/all_external_fixed.csv", "name_column" : 0, "id_column" : -1, "header_line" : 4,
 		"cat_line" : 0, "column_action_line" : 3, 'start_col' : 3, 'start_line' : 5, 'source_line' : 1, 'temporal_line' : 2};
 	//var external_data_def = {"external_filename" : "israel_health_new.csv", "name_column" : 0, "id_column" : -1, "header_line" : 1, "cat_line" : '', "column_action_line" : 0, 'start_col' : 5, 'start_line' : 2};
 	//var external_data_def = {"external_filename" : "wages_new.csv", "name_column" : -1, "id_column" : 2, "header_line" : 1, "cat_line" : '', "column_action_line" : 0, 'start_col' : 5, 'start_line' : 2};
@@ -195,8 +195,8 @@
 			//console.log(first_visit, normalize_link);
 			//console.log(url_col_name);
 			// Initialize geojson in leaflet with color brew.
-			lgb = leafletGeoBrew("israel_201_muni.json", url_col_name, "YlRPu", 'muni_heb', "a14" , "semel", undefined,"", "a4"
-					,"israel_reg_muni_53.geojson" , curr_leaf, "crime_data_after_proc_.csv", normalize_link, csv_object, 1);						
+			lgb = leafletGeoBrew("src/static/israel_201_muni.json", url_col_name, "YlRPu", 'muni_heb', "a14" , "semel", undefined,"", "a4"
+					,"src/static/israel_reg_muni_53.geojson" , curr_leaf, "crime_data_after_proc_.csv", normalize_link, csv_object, 1);						
 		}
 	}, 10)
 

@@ -1,3 +1,4 @@
+'use strict'
 
 function parseCSVByObject(external_data_def) {
   const new_headers = []
@@ -55,7 +56,7 @@ function parseCSVByObject(external_data_def) {
       // console.log(new_headers);
       // Create the new data array.
       for (let i = start_line; i < len; i++) {
-        line = results.data[i]
+        const line = results.data[i]
         // console.log(line[0]);
         const id = !(id_column >= 0) ? line[name_column] : line[id_column]
         // console.log(id);
@@ -763,7 +764,7 @@ function leafletGeoBrew(filename, current_comn_name, default_color, name_prop, n
     // Add data from external CSV to the displayed polygons.
     function parseCSV() {
       // TODO: iterate on new categories
-      for (header_option in csv_object.header_options) {
+      for (const header_option in csv_object.header_options) {
         // console.log(header_option);
         // console.log(csv_object.header_options[header_option]);
         header_options_by_cat[header_option] = csv_object.header_options[header_option]
@@ -1520,13 +1521,14 @@ function leafletGeoBrew(filename, current_comn_name, default_color, name_prop, n
 
   function changeColumn(event, ui, external_val) {
     // console.log(ui);
+    let chosen_category
     const cat_sel_value = document.getElementById(`cat_sel`).value
     if (!external_val && cat_sel_value >= 0) { chosen_category = ui.item.option.attributes[`data-cat_id`].value } else {
       chosen_category = cat_sel_value
     }
     changeColSelectOptions(chosen_category)
     destroyDataTable()
-    chosen_option = ui ? ui.item.option.attributes[`data-col_name`].value : external_val.attributes[`data-col_name`].value
+    const chosen_option = ui ? ui.item.option.attributes[`data-col_name`].value : external_val.attributes[`data-col_name`].value
     changeColorByAttr(geojsonLayer, chosen_option)
     updateControlElements()
     changeDisplayedDataCookie(chosen_option, curr_leaf)
@@ -1614,7 +1616,7 @@ function leafletGeoBrew(filename, current_comn_name, default_color, name_prop, n
   }
 
   function writeExtremeValues() {
-    for (ds in header_name_to_alias) {
+    for (const ds in header_name_to_alias) {
       profileHeadersAll.push(header_name_to_alias[ds].name)
     }
     geojsonLayer.eachLayer(layer => {
@@ -1624,7 +1626,7 @@ function leafletGeoBrew(filename, current_comn_name, default_color, name_prop, n
 
   function addControlElements() {
     // map.attributionControl.addAttribution(
-    attribution_text =
+    const attribution_text =
 
   `${`<a href=http://www.cbs.gov.il/reader/?MIval=cw_usr_view_SHTML&ID=357 target="_blank">` +
   ` `}${ui_strings[`cbs_attribution`]} </a>` +
@@ -1827,7 +1829,7 @@ function leafletGeoBrew(filename, current_comn_name, default_color, name_prop, n
     const distinct_array = []
     brew_data_array = []
     brew_bucket_ind = 0
-    population = 0
+    let population = 0
     // Iterate over the features and create the new brew_data_array.
     featureGroup.eachLayer(layer => {
       let feat_attr = layer.feature.properties[attr]
@@ -2253,7 +2255,7 @@ function leafletGeoBrew(filename, current_comn_name, default_color, name_prop, n
 
   function getCurrentHeaderAlias() {
     const result = header_name_to_alias.filter(obj => obj.name === current_comn_name)
-    return display_name = (typeof (result[0]) !== `undefined`) ? result[0].alias : current_comn_name
+    return (typeof (result[0]) !== `undefined`) ? result[0].alias : current_comn_name
   }
 
   function getCurrentHeaderArray(c_col = current_comn_name) {
@@ -2313,7 +2315,7 @@ function leafletGeoBrew(filename, current_comn_name, default_color, name_prop, n
     cb.setSeries(brew_data_array)
     cb.setNumClasses(brew_max_num)
     cb.classify(classy_method)
-    breaks = cb.getBreaks()
+    const breaks = cb.getBreaks()
     // TODO: Extract createColorsTable function.
     let brew_color_div = `<table id="brew_colors">`
     for (let c = 0; c < colors.length; c++) {
@@ -2339,7 +2341,7 @@ function leafletGeoBrew(filename, current_comn_name, default_color, name_prop, n
   function showSelectedData() {
     const parent = document.getElementById(`showTable`)
     if (!document.getElementById(`dataTable`)) {
-      e = document.createElement(`div`)
+      const e = document.createElement(`div`)
       e.id = `dataTable`
       e.innerHTML = createDataTable()
       if (e.innerHTML.length > 0) {

@@ -25,11 +25,17 @@
 	<script src="vendor/Control.Geocoder.js"></script>
 	<link rel="stylesheet" href="vendor/Control.Opacity.css" />
 	<script src="vendor/Control.Opacity.js"></script>
+	<script src="dist/js/selectize.js"></script>
+	<link rel="stylesheet" href="css/selectize.css" />
+	<link rel="stylesheet" href="https://mottie.github.io/tablesorter/css/theme.blue.css" />
 	<!--<script src="leaflet.js"></script>-->
 	<!--<script src="proj4.js"></script>
 	<script src="proj4leaflet.js"></script>
 	<script src="EPSG2039.js"></script>-->
 	<script src="vendor/leaflet.ajax.js"></script>
+	<script src="https://mottie.github.io/tablesorter/js/jquery.tablesorter.js"></script>
+	<script src="https://mottie.github.io/tablesorter/js/jquery.tablesorter.widgets.js"></script>	
+	<script src="https://mottie.github.io/tablesorter/js/widgets/widget-scroller.js"></script>
 	<!--<script src="classybrew_c_min.js"></script>-->
 	<script src="vendor/classybrew.js"></script>
 	<script src="dist/papaparse.min.js"></script>
@@ -67,10 +73,12 @@
 <div id='content-wrapper'>
 	<div id='map' class='map_class wide_map double_pane'></div>
 	<div id='data_proc' class='data_proc' style='display:none;'>
-		<span> <script>document.write(ui_strings['data_proc_header']);</script><center><div id='select_wrapper' class='select_wrapper' style="display:inline-block;">
-			<select id='data_col_select0' class='data_col_select' ></select>
-		</div></center><div id='data_col_alias0'></div></span>
-		<div id='data_proc_table_wrapper'></div>
+		<div id='data_processing' style='display:none;'>
+			<span> <script>document.write(ui_strings['data_proc_header']);</script><center><div id='select_wrapper' class='select_wrapper' style="display:inline-block;">
+				<select id='data_col_select0' class='data_col_select' ></select>
+			</div></center><div id='data_col_alias0'></div></span>
+			<div id='data_proc_table_wrapper'></div>
+		</div>
 	</div>
 </div><!--</div>-->
 <select id='col_select' display='none'  class='col_select' ></select>
@@ -196,7 +204,7 @@
 			//console.log(url_col_name);
 			// Initialize geojson in leaflet with color brew.
 			lgb = leafletGeoBrew("src/static/israel_201_muni.json", url_col_name, "YlRPu", 'muni_heb', "a14" , "semel", undefined,"", "a4"
-					,"src/static/israel_reg_muni_53.geojson" , curr_leaf, "crime_data_after_proc_.csv", normalize_link, csv_object, 1);						
+					,"src/static/israel_reg_muni_53.geojson" , curr_leaf, "crime_data_after_proc_.csv", normalize_link, csv_object, 0);						
 		}
 	}, 10)
 

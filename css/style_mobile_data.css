@@ -108,16 +108,20 @@ select {
 }
 
 #col_select_custom-combobox > input {
-	width: 200px !important;
+	width: 100% !important;
 }
 
 #ui-id-1 {
-	max-width: 195px !important;
+	max-width: 97% !important;
 }
 
 span#info_header {
     /*display: inline-flex;*/
-    width: 200px;
+    width: 100%;
+}
+
+span#col_select_custom-combobox {
+    width: 100%;
 }
 
 .info h4 {

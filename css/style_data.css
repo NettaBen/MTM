@@ -14,11 +14,11 @@ body {
 #map.double_pane {
 	width: 65%;
 	/*margin: auto;*/
-	margin: 0 0 0 2%;
+	/*margin: 0 0 0 2%;*/
 	display: inline-block;
 }
 #map.wide_map {
-	width: 80% !important;
+	width: 100% !important;
 	margin: auto;
 	display: block;
 }
@@ -27,7 +27,7 @@ body {
 #data_proc {
 	direction: rtl;
 	vertical-align : top;
-    width: 30%;
+    width: 34%;
     min-width: 30%;
     height: 95%;
     border-radius: 5px;
@@ -255,7 +255,7 @@ input.filter_value {
 
 #showTable {
 	position: relative;
-    bottom: 40px;
+    /*bottom: 40px;*/
 }
 
 div#showTableContainer {
@@ -266,95 +266,9 @@ div#showTableContainer {
 	z-index: 1001 !important;
 }
 
-#selected_features_table th {
-	font-weight: normal;
-	color: black;
-	width: 100px;
-	padding: 4px;
-	cursor: pointer;
-}
-
-#selected_features_table th > div {
-  width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: pre-wrap;
-  max-height: 90px;
-}
-
-#table_container {
-	overflow-x: auto;
-    /*height: inherit;*/
-	width: 250px;
-	direction: rtl;
-	/*margin-left: 4px;*/
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 6px;
-    border: 1px solid #cccccc;
-	padding: 4px;
-}
-
-#selected_features_table thead {
-	display: block;
-}
-
-#selected_features_table tbody {
-	max-height: 450px;
-}
-
-/*#selected_features_table thead th:nth-child(1) {
-	position: relative;
-	display: block;
-}
-
- #selected_features_table thead th:nth-child(2)  {
-  position: relative;
-  display: block;
-}
-#selected_features_table  tbody tr td:nth-child(1) {
-	  position: relative;
-	display: block;
-}
- #selected_features_table  tbody tr td:nth-child(2) {
-  position: relative;
-  display: block;
-}*/
-
-/*#selected_features_table thead tr{
-	border: none;
-}*/
-tbody.overflow {
-    display: block;
-    overflow-y: auto;
-    height: auto;
-	resize: vertical;
-}
-
-#selected_features_table td {
-	color: #555;
-	text-align: center;
-    padding: 4px;
-	width: 100px;
-	direction: ltr;
-}
-
-#selected_features_table tr {
-    border-bottom: 1px solid rgba(132, 132, 132, 0.5);
-	cursor: alias;
-}
-
-#selected_features_table {
-	border-collapse: collapse;
-	/*height: auto;
-	direction: rtl;
-	position: relative;*/
-	margin: 0 auto;
-	z-index: 1003;
-	font-size: 12px;
-}
 
 #emptySelection {
-	position: absolute;
+	/*position: absolute;*/
 	background-color: #d3d3d3;
     border: 1px solid rgba(0,0,0,0.2);
 	margin-top: 1px;
@@ -419,9 +333,9 @@ tbody.overflow {
 }
 #map_header {
 	/*width: 100%;*/
-	width: 80%;
+	width: 100%;
 	position: relative;
-	left: 10%;
+	/*left: 10%;*/
 
 	display: inline-block;
     margin: 0 auto;
@@ -872,8 +786,9 @@ table#data_proc_table td, #data_proc_table th {
 
 #selected_table_header {
 	position: relative;
-    float: left;
-    left: 34px;
+    float: right;
+    right: 34px;
+	
 	font-size: 13px;
 	font-style: italic;
 	direction: rtl;
@@ -993,4 +908,257 @@ th.index-col > div {
 
 .action {
 	cursor: pointer;
+}
+
+#info > #info_footer > #muni_data {
+	display: none;
+}
+
+#data_proc_control_container {
+	display: none;
+}
+
+.chart > div > div {
+	width: inherit !important;
+}
+
+.chart > div > div > div > svg {
+	width: inherit !important;
+}
+
+.chart {
+	width: 100%;
+	height: 250px;
+}
+
+input#muni_sel-selectized::-webkit-input-placeholder {
+	font-style: italic;
+	
+}
+
+.currentProfile {
+	border: 1px solid grey !important;
+}
+
+.name_display {
+	width: 150px;
+	overflow: hidden;
+    white-space: pre-wrap;
+    text-overflow: ellipsis;
+}
+
+#name_display {
+	clear: right;
+}
+
+/*#selected_features_table > thead:first-child > tr:first-child > th:first-child {
+    position: absolute;
+    display: inline-block;
+    height: 100%;
+}
+
+#selected_features_table > tbody > tr > td:first-child
+,#selected_features_table > tbody > tr > td:nth-child(2)
+ {
+    position: absolute;
+    display: inline-block;
+    background-color: lightgrey;
+    height: 100%;
+}
+
+#selected_features_table > thead:first-child > tr:first-child > th:nth-child(3) {
+    padding-right: 100px;
+}
+
+#selected_features_table > tbody > tr > td:nth-child(3) {
+    padding-right: 100px !important;
+}*/
+
+#selected_features_table_right, #selected_features_table {
+	display: inline-block;
+} 
+
+#selected_features_table_right thead, #selected_features_table thead {
+	height: 50px;
+}
+
+#selected_features_table th, #selected_features_table_right th {
+	font-weight: normal;
+	color: black;
+	width: 100px;
+	padding: 4px;
+	cursor: pointer;
+}
+
+#selected_features_table th > div, #selected_features_table_right th > div {
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
+  max-height: 90px;
+}
+
+#table_container {
+	overflow-x: auto;
+	overflow-y: auto;
+    max-height: 450px;
+	width: 350px;
+	min-width: 350px;
+	direction: rtl;
+	/*margin-left: 4px;*/
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 6px;
+    border: 1px solid #cccccc;
+	padding: 4px;
+}
+
+#selected_features_table thead, #selected_features_table_right thead {
+	display: inline-block;	
+}
+
+#selected_features_table tbody, #selected_features_table_right tbody {
+	max-height: 450px;
+}
+
+
+tbody.overflow {
+    /*display: block;
+    overflow-y: auto;
+    height: auto;
+	resize: vertical;*/
+}
+
+#selected_features_table td, #selected_features_table_right td {
+	color: #555;
+	text-align: center;
+    padding: 4px;
+	width: 100px;	
+	white-space: nowrap;
+}
+
+#selected_features_table tr, #selected_features_table_right tr {
+    border-bottom: 1px solid rgba(132, 132, 132, 0.5);
+	cursor: alias;
+	
+}
+
+/*#selected_features_table tr:first-child, #selected_features_table_right tr:first-child {*/
+#selected_features_table thead tr, #selected_features_table_right thead tr {
+    border-bottom: none !important;
+	
+}
+
+#selected_features_table, #selected_features_table_right {
+	border-collapse: collapse;
+
+	/*margin: 0 auto;*/
+	z-index: 1003;
+	font-size: 14px;
+}
+
+
+.tblTitle{
+   position:absolute;
+    top:0px;
+    margin-bottom:30px;
+    background:lightblue;
+}
+/*td, th{
+    padding:5px;
+    height:40px;
+    width:40px;
+    font-size:14px;
+}*/
+
+#table_container{
+    display:inline-block;
+    /*zoom: 1;
+    *display:inline;
+    
+    height:300px;*/
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#freeze_container{
+    display:inline-block;
+    zoom: 1;
+    *display:inline;
+    vertical-align:top;
+    width:100px;
+}
+#horizontal_scrolling_div{
+    display:inline-block;
+    zoom: 1;
+    *display:inline;
+    width:200px;
+    overflow-x:scroll;
+    vertical-align:top;
+}
+
+.freeze_table{   
+    /*background-color: #0099dd;*/
+    z-index:2;
+}
+
+#selected_features_table_right{
+    /*width:100px;*/
+}
+
+#selected_features_table{
+    max-width:400px;
+    overflow:hidden;
+}
+.selectize-control {
+	position: static !important;
+	z-index: 1005;
+}
+.selectize-dropdown {
+	z-index: 1005 !important;
+	position: sticky !important;
+}
+
+#selected_features_table_right td {
+	max-width: 100px;
+}
+
+.muni_table_name {
+	max-width: 100px;
+	overflow: hidden;
+    white-space: pre-wrap;
+    text-overflow: ellipsis;
+}
+
+.tablesorter-scroller {
+  direction: rtl;
+}
+
+td.index-col, th.index-col  {
+	width: 20px !important;
+}
+.tablesorter-blue tbody td, .tablesorter-blue tfoot th, .tablesorter-blue tfoot td {
+	/* force "Notes" column to not wrap, so we get a horizontal scrolling demo! (optional css) */
+	white-space: nowrap;
+	/* Add min column width, or "Index" column filter gets too narrow to use (optional css) */
+	min-width: 20px;
+	max-width: 100px;
+	overflow: hidden;
+    white-space: pre-wrap;
+    text-overflow: ellipsis;
+	text-align: center;
+}
+
+.tablesorter-header-inner {
+    text-align: -webkit-center;
+}
+
+#showTable {
+	display: none;
+}
+
+.tablesorter-blue th{
+	background-color: #467cd1 !important;
+	color: white !important;
+	font-size: 14px !important;
+	text-shadow: none !important;
 }

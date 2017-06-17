@@ -1,7 +1,21 @@
 {
   "extends": "standard",
   "parser": "babel-eslint",
+  "env": {
+    "browser": true //TODO remove, use only window global
+  },
+  "globals": {
+    "$": false,
+    "L": false,
+    "lgb": false,
+    "Papa": false
+  },
   "rules": {
+    "camelcase": 0,
+    "no-tabs": 0,
+    "no-mixed-spaces-and-tabs": 0,
+    "no-unused-vars": 0,
+
     "arrow-body-style": [2, "as-needed"],
     "arrow-parens": [2, "as-needed"],
     "arrow-spacing": [2, { "before": true, "after": true }],
